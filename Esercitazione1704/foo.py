@@ -1,0 +1,4 @@
+BUFFER_SIZE = 1024
+HOST = 'localhost'
+PORT = 0
+NUM_THREADS = 5
