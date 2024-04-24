@@ -38,7 +38,17 @@ class X:
             self.changeA() # a usual lock would block at here
             self.changeB()
 
+
 x = X()
+print('a:', x.a)
 x.changeA()
+
+print('a dopo changeA: ', x.a)
+print('b:', x.b)
 x.changeB()
+
+print('b dopo changeB: ', x.b)
 x.changeAandB()
+
+print('a dopo changeAandB: ', x.a, 'b dopo changeAandB: ', x.b)
+
