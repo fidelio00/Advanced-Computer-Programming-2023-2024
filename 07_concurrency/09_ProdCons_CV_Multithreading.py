@@ -135,3 +135,98 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+------------------------------------------------------------------------------------------
+
+#### ESERCIZIO PROD_CONS con variabili condition
+
+import threading
+import time
+from random import randint
+
+CONSUMER = 'Consumer'
+PRODUCER = 'Producer'
+N_CONSUMERS = 10
+N_PRODUCERS = 10
+QUEUE_SIZE = 5
+
+
+def an_item_is_available(queue):
+    return not (len(queue) == 0)
+
+
+def a_space_is_available(queue):
+    return not (len(queue) == QUEUE_SIZE)
+
+
+def get_an_available_item(queue):
+    return queue.pop(0)
+
+
+def make_an_item_available(queue):
+    item = randint(0, 100)
+    queue.append(item)
+    return item
+
+
+class consumerThread(threading.Thread):
+    
+    def __init__(self, producer_cv, consumer_cv, queue, name):
+        threading.Thread.__init__(self, name=name)
+        self.producer_cv = producer_cv
+        self.consumer_cv = consumer_cv
+        self.queue = queue
+
+    def run(self):
+        with self.consumer_cv:
+            while not an_item_is_available(self.queue):
+                self.consumer_cv.wait()
+
+            time.sleep(1.0)
+            item = get_an_available_item(self.queue)
+            print(f"{self.name} consumed item: {item}")
+            self.producer_cv.notify()
+
+def produce_one_item(producer_cv, consumer_cv, queue):
+    with producer_cv:
+        while not a_space_is_available(queue):
+            producer_cv.wait()
+
+        time.sleep(1.0)
+        item = make_an_item_available(queue)
+        print(f"Produced item: {item}")
+        consumer_cv.notify()
+
+def main():
+    queue = []
+    cv_lock = threading.Lock()
+    producer_cv = threading.Condition(lock=cv_lock)
+    consumer_cv = threading.Condition(lock=cv_lock)
+
+    consumers = []
+    producers = []
+
+    for i in range(N_CONSUMERS):
+        name = CONSUMER + str(i)
+        ct = consumerThread(producer_cv, consumer_cv, queue, name)
+        ct.start()
+        consumers.append(ct)
+
+    for i in range(N_PRODUCERS):
+        pt = threading.Thread(
+            target=produce_one_item,
+            name=PRODUCER + str(i),
+            args=(producer_cv, consumer_cv, queue),
+        )
+        pt.start()
+        producers.append(pt)
+
+    for ct in consumers:
+        ct.join()
+
+    for pt in producers:
+        pt.join()
+
+if __name__ == '__main__':
+    main()
+
