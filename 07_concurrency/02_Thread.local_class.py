@@ -30,3 +30,25 @@ if __name__ == '__main__':
         t = threading.Thread(target=f, args=(d,))
         t.start()
 
+
+----------------------------------------------------
+
+#Stesso codice ma senza usare logging
+
+import threading
+
+def func(id):
+    print("Thread: ", id, "running \n")
+
+if __name__ == "__main__":
+    
+    threads = list()
+    
+    for i in range(1,5):
+        t= threading.Thread(target=func,args=("T"+str(i),))
+        threads.append(t)
+        t.start()
+
+    for index, t in enumerate(threads):
+        print("joining thread index: ", index, "thread: ", t)
+        t.join()
