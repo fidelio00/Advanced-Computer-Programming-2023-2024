@@ -23,10 +23,9 @@ if __name__ == '__main__':
     print("all joined")
 
 """
-NOTA: Il motivo per cui non vedi "Process running" stampato potrebbe essere dovuto a un problema di sincronizzazione delle stampe tra processi. 
-In Python, quando si utilizzano processi multipli con il modulo multiprocessing, ogni processo ha il proprio spazio di stampa separato. 
-Pertanto, le stampe effettuate all'interno del processo figlio non saranno visibili direttamente nel processo genitore, 
-a meno che non si utilizzino metodi specifici per comunicare tra i processi.
+NOTA: Il motivo per cui non vedi "Process running" è che in Python, quando si utilizzano processi multipli con il modulo multiprocessing, 
+ogni processo ha il proprio spazio di stampa separato. Pertanto, le stampe effettuate all'interno del processo figlio 
+non saranno visibili direttamente nel processo genitore, a meno che non si utilizzino metodi specifici per comunicare tra i processi.
 """
 
 ---------------------------------------------------------------------------------------------------------------
