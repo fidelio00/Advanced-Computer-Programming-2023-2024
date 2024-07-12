@@ -1,0 +1,34 @@
+// Si sta utilizzando la versione 3 di Protocol Buffers
+syntax = "proto3";
+
+// Definisco il package del file proto. 
+// I package sono utilizzati per evitare conflitti di nome tra diversi file proto
+package helloworld;
+
+// The greeting service definition.
+// Si definisce un servizio chiamato "Greeter". 
+// Un servizio è una collezione di metodi di RPC che possono
+// essere chiamati in remoto da client.
+
+service Greeter {
+  // Sends a greeting
+  // Il metodo "SayHello" accetta un messaggio "HelloRequest" 
+  // e restituisce un messaggio "HelloReply"
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+  // Sends another greeting
+  // rpc SayHelloAgain (HelloRequest) returns (HelloReply) {}
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  // Una stringa che rappresenta il nome dell'utente. 
+  // Il numero 1 indica il numero del campo, utilizzato
+  // per l'identificazione univoca nel messaggio serializzato
+  string name = 1;
+}
+
+// The response message containing the greetings
+message HelloReply {
+  // una stringa che rappresenta il messaggio di risposta, ovvero il saluto generato.
+  string message = 1;
+}
